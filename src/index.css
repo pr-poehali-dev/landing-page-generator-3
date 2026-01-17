@@ -110,4 +110,16 @@
   h6 {
     font-family: "Montserrat", sans-serif;
   }
+
+  .scroll-reveal {
+    transition:
+      opacity 0.8s ease-out,
+      transform 0.8s ease-out;
+    transform: translateY(30px);
+  }
+
+  .scroll-reveal.animate-fade-in {
+    opacity: 1 !important;
+    transform: translateY(0);
+  }
 }

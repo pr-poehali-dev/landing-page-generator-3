@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +16,27 @@ const Index = () => {
   const [amount, setAmount] = useState(10000000);
   const [term, setTerm] = useState(3);
   const [clientType, setClientType] = useState<'IP' | 'OOO'>('IP');
+
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    const elements = document.querySelectorAll('.scroll-reveal');
+    elements.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
 
   const calculatePayment = () => {
     const monthlyRate = (clientType === 'IP' ? 0.18 : 0.16) / 12;
@@ -150,7 +171,7 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {advantages.map((adv, idx) => (
-              <Card key={idx} className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-primary/50 animate-fade-in" style={{ animationDelay: `${idx * 100}ms` }}>
+              <Card key={idx} className="scroll-reveal opacity-0 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-primary/50" style={{ transitionDelay: `${idx * 100}ms` }}>
                 <CardHeader>
                   <div className="w-14 h-14 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mb-4 shadow-lg">
                     <Icon name={adv.icon as any} size={28} className="text-white" />
@@ -167,7 +188,7 @@ const Index = () => {
       </section>
 
       {/* Warning Block */}
-      <section className="py-12 bg-destructive/10 border-y-2 border-destructive/30">
+      <section className="py-12 bg-destructive/10 border-y-2 border-destructive/30 scroll-reveal opacity-0">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="flex items-start gap-4">
             <Icon name="AlertTriangle" className="text-destructive mt-1" size={32} />
@@ -198,7 +219,7 @@ const Index = () => {
       </section>
 
       {/* Calculator */}
-      <section id="calculator" className="py-20 bg-gradient-to-br from-muted/50 to-white">
+      <section id="calculator" className="py-20 bg-gradient-to-br from-muted/50 to-white scroll-reveal opacity-0">
         <div className="container mx-auto px-4">
           <Card className="max-w-4xl mx-auto shadow-2xl border-2">
             <CardHeader className="text-center">
@@ -291,7 +312,7 @@ const Index = () => {
                 <h3 className="text-xl font-semibold text-muted-foreground mb-6 border-b pb-2">{category.category}</h3>
                 <div className="grid md:grid-cols-3 gap-6">
                   {category.items.map((product, idx) => (
-                    <Card key={idx} className="hover:shadow-xl transition-all hover:-translate-y-1 border-2 hover:border-primary/30">
+                    <Card key={idx} className="scroll-reveal opacity-0 hover:shadow-xl transition-all hover:-translate-y-1 border-2 hover:border-primary/30" style={{ transitionDelay: `${idx * 100}ms` }}>
                       <CardHeader>
                         <CardTitle className="text-lg text-primary">{product.title}</CardTitle>
                         <CardDescription>{product.desc}</CardDescription>
@@ -323,7 +344,7 @@ const Index = () => {
           
           <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {testimonials.map((testimonial, idx) => (
-              <Card key={idx} className="hover:shadow-xl transition-all hover:-translate-y-1 animate-fade-in" style={{ animationDelay: `${idx * 150}ms` }}>
+              <Card key={idx} className="scroll-reveal opacity-0 hover:shadow-xl transition-all hover:-translate-y-1" style={{ transitionDelay: `${idx * 150}ms` }}>
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -362,7 +383,7 @@ const Index = () => {
               { num: 3, title: 'Подача (1 день)', desc: 'Готовим и отправляем документы', color: 'from-accent to-primary' },
               { num: 4, title: 'Деньги', desc: 'Решение и перевод средств', color: 'from-primary to-accent' },
             ].map((step) => (
-              <div key={step.num} className="text-center relative animate-fade-in" style={{ animationDelay: `${step.num * 150}ms` }}>
+              <div key={step.num} className="scroll-reveal opacity-0 text-center relative" style={{ transitionDelay: `${step.num * 150}ms` }}>
                 <div className={`w-20 h-20 bg-gradient-to-br ${step.color} text-white rounded-full flex items-center justify-center mx-auto text-3xl font-bold mb-4 shadow-xl`}>
                   {step.num}
                 </div>
@@ -375,7 +396,7 @@ const Index = () => {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 bg-muted/50">
+      <section className="py-16 bg-muted/50 scroll-reveal opacity-0">
         <div className="container mx-auto px-4 max-w-3xl">
           <h2 className="text-3xl font-bold text-center mb-10 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Частые вопросы
@@ -410,7 +431,7 @@ const Index = () => {
       </section>
 
       {/* CTA */}
-      <section id="contacts" className="py-20 bg-gradient-to-br from-primary via-secondary to-accent text-white relative overflow-hidden">
+      <section id="contacts" className="py-20 bg-gradient-to-br from-primary via-secondary to-accent text-white relative overflow-hidden scroll-reveal opacity-0">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')]" />
         </div>
