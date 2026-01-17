@@ -122,4 +122,18 @@
     opacity: 1 !important;
     transform: translateY(0);
   }
+
+  @keyframes gradient-flow {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-gradient-flow {
+    animation: gradient-flow 15s ease infinite;
+  }
 }

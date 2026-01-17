@@ -16,6 +16,16 @@ const Index = () => {
   const [amount, setAmount] = useState(10000000);
   const [term, setTerm] = useState(3);
   const [clientType, setClientType] = useState<'IP' | 'OOO'>('IP');
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const observerOptions = {
@@ -123,8 +133,11 @@ const Index = () => {
 
       {/* Hero */}
       <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent opacity-90" />
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80')] bg-cover bg-center mix-blend-overlay opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent opacity-90 animate-gradient-flow bg-[length:200%_200%]" />
+        <div 
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80')] bg-cover bg-center mix-blend-overlay opacity-20"
+          style={{ transform: `translateY(${scrollY * 0.5}px)` }}
+        />
         
         <div className="container mx-auto px-4 relative z-10 text-white">
           <div className="max-w-3xl animate-fade-in">
